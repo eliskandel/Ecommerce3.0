@@ -9,7 +9,8 @@ from rest_framework.generics import(
     ListAPIView,
     GenericAPIView,
     UpdateAPIView,
-    CreateAPIView
+    CreateAPIView,
+    DestroyAPIView
 )
 from .models import Cart,CartItem
 from product.models import Product
@@ -56,3 +57,12 @@ class CartItemAddAPIView(CreateAPIView):
         cart_item.save()
 
         return Response(serializer.data)
+
+class CartItemRemoveView(DestroyAPIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+    
+    def get_queryset(self, pk):
+        cart=Cart.objects.get(user=self.request.user)
+        cart_item=cart.cart_items.get(product_id=pk)
+        return cart_item

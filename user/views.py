@@ -4,7 +4,8 @@ from rest_framework.generics import (
     GenericAPIView,
     UpdateAPIView,
     CreateAPIView,
-    DestroyAPIView
+    DestroyAPIView,
+    RetrieveAPIView
 )
 from .models import User
 from .serializer import (
@@ -22,10 +23,19 @@ from rest_framework.permissions import IsAuthenticated
 class UserListView(ListAPIView):
     queryset=User.objects.all()
     serializer_class= UserRetriveSerializer
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
     
-
+class UserRetrieveView(RetrieveAPIView):
+    queryset=User.objects.all()
+    serializer_class= UserRetriveSerializer 
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return User.objects.filter(id=pk)
+    
 class UserLoginView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer= UserLoginSerializer(data=request.data)
@@ -85,6 +95,6 @@ class UserUpdateView(UpdateAPIView):
     authentication_classes=[TokenAuthentication]
     
     def get_queryset(self):
-        user=User.objects.filter(username=self.request.user)
-        return user
+        return User.objects.filter(username=self.request.user)
+         
     

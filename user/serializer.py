@@ -32,6 +32,8 @@ class UserRetriveSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'email',
+            'caterogy'
+            
         ]
 
 class UserLoginSerializer(serializers.Serializer):

@@ -27,10 +27,11 @@ class ProductListView(ListAPIView):
     
 class ProductRetrieveView(RetrieveAPIView):
     serializer_class=ProductSerializer
-    authentication_classes=[TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
     def get_queryset(self):
-        return Product.objects.filter(seller=self.request.user)
+        pk=self.kwargs.get('pk')
+        return Product.objects.filter(id=pk)
 
 class ProductUpdateView(UpdateAPIView):
     queryset=Product.objects.all()
